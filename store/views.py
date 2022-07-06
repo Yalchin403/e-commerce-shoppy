@@ -21,3 +21,11 @@ class StoreView(View):
             'categories': category_qs
         }
         return render(request, 'store/store.html', context)
+
+
+class ProductDetailView(View):
+    def get(self, request, category_slug, product_slug):
+        product_obj = get_object_or_404(Product, slug=product_slug, category__slug=category_slug)
+        context = {"product": product_obj}
+        
+        return render(request, 'store/product_detail.html', context)

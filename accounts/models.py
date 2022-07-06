@@ -6,9 +6,12 @@ class MyAccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password):
         if not email:
             raise ValueError('User must have an email address')
-        
+
         if not username:
             raise ValueError('User must have an username')
+
+        if not password:
+            raise ValueError('User must have a password')
 
         user = self.model(
             email = self.normalize_email(email.lower()),
@@ -19,10 +22,20 @@ class MyAccountManager(BaseUserManager):
 
         user.set_password(password)
         user.save(using=self.db)
-        
+
         return user
 
     def create_superuser(self, first_name, last_name, username, email, password):
+
+        if not email:
+            raise ValueError('User must have an email address')
+
+        if not username:
+            raise ValueError('User must have an username')
+
+        if not password:
+            raise ValueError('User must have a password')
+
         user = self.create_user(
             email = self.normalize_email(email.lower()),
             username = username,
@@ -35,12 +48,11 @@ class MyAccountManager(BaseUserManager):
         user.is_staff = True
         user.is_admin = True
         user.is_superadmin = True
-        user
         user.save(using=self.db)
 
         return user
 
-        
+
 class Account(AbstractBaseUser):
     first_name = models.CharField(max_length=55)
     last_name = models.CharField(max_length=55)
